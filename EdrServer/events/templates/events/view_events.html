@@ -1,0 +1,65 @@
+
+{% extends 'global.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'events/css/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+    <a href="{% url 'read_events' %}">Read Events</a>
+    <h1>Events</h1>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Time Created</th>
+                    <th>Computer</th>
+                    <th>Channel</th>
+                    <th>Event ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in item_page %}
+                <tr id="event/{{ item.universal_id }}" action="{% url 'get_event' %}">
+                    <td>{{ forloop.counter0|add:item_page.start_index }}</td>
+                    <td>{{ item.time_created_system_time }}</td>
+                    <td>{{ item.computer }}</td>
+                    <td>{{ item.channel }}</td>
+                    <td>{{ item.event_id }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="table-pagination">
+        <span class="step-links">
+            {% if item_page.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ item_page.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ item_page.number }} of {{ item_page.paginator.num_pages }}.
+            </span>
+
+            {% if item_page.has_next %}
+                <a href="?page={{ item_page.next_page_number }}">next</a>
+                <a href="?page={{ item_page.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}
+
+{% block extra_html %}
+    <div class="sidebar-info" style="display: none;">
+        <h2>Event Details</h2>
+        <pre class="sidebar-info-json"></pre>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'events/js/scripts.js' %}"></script>
+{% endblock %}

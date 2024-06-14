@@ -1,0 +1,30 @@
+
+
+{% extends 'global.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'rules/css/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="rule-container" id="rule/{{ rule_id }}">
+        <h2>Rule: {{ rule_id }}</h2>
+        <textarea id="yaml-content" readonly>{{ yaml_content }}</textarea>
+        <div class="button-bar">
+            <button id="edit-button">Edit</button>
+            <button id="update-button" action="{% url 'update_rule' %}" disabled>Update</button>
+            <button id="cancel-button">Cancel</button>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extra_html %}
+
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'rules/js/scripts.js' %}"></script>
+{% endblock %}

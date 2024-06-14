@@ -1,0 +1,40 @@
+
+th label, th input[type="checkbox"] {
+    vertical-align: middle; /* Align them vertically in the middle */
+}
+
+/* Style the checkbox */
+input[type="checkbox"] {
+    width: 16px; /* Specify a width */
+    height: 16px; /* Specify a height */
+    background-color: #eee; /* Set a background color */
+}
+
+/* Style the checkbox when it's checked */
+input[type="checkbox"]:checked {
+    background-color: #007BFF; /* Set a different background color when checked */
+}
+
+/* Style the checkbox when it's hovered over */
+input[type="checkbox"]:hover {
+    background-color: #ddd; /* Set a different background color when hovered over */
+}
+
+
+.actions-container {
+    display: flex;
+    align-items: flex-end;
+}
+
+
+#upload-form input[type="submit"] {
+    height: 32px;
+    padding: 6px 12px;
+    font-size: 13px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #008CBA; /* Blue */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}

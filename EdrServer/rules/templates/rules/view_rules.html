@@ -1,0 +1,82 @@
+
+{% extends 'global.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'rules/css/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+    <!-- Main content goes here -->
+    <h1>Rules</h1>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-index">Index</th>
+                    <th class="col-title">Title</th>
+                    <th class="col-status">Status</th>
+                    <th class="col-level">Level</th>
+                    <th class="col-deployed">Deployed</th>
+                    <th class="col-actions"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in item_page %}
+                <tr id="rule/{{ item.id }}">
+                    <td>{{ forloop.counter0|add:item_page.start_index }}</td>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.status }}</td>
+                    <td>{{ item.level }}</td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox" class="toggle-rule" action="{% url 'toggle_rule' %}" {% if item.is_active %}checked{% endif %}>
+                            <span class="slider round"></span>
+                        </label>
+                    </td>                   
+                    <td>
+                        <div class="dropdown">
+                            <div class="dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="dropdown-content">
+                                <a href="{% url 'view_rule' item.id %}">View</a>
+                                <a href="{% url 'copy_rule' item.id %}">Copy</a>
+                                <a action="{% url 'delete_rule' %}" class="delete-rule">Delete</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="table-pagination">
+        <span class="step-links">
+            {% if item_page.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ item_page.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ item_page.number }} of {{ item_page.paginator.num_pages }}.
+            </span>
+
+            {% if item_page.has_next %}
+                <a href="?page={{ item_page.next_page_number }}">next</a>
+                <a href="?page={{ item_page.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}
+
+{% block extra_html %}
+
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'rules/js/scripts.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,35 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        EDR System
+    </title>
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar-navi">
+            <a href="{% url 'dashboard' %}" class="sidebar-link">Dashboard</a>
+            <a href="{% url 'alerts' %}" class="sidebar-link">Alerts</a>
+            <a href="{% url 'events' %}" class="sidebar-link">Events</a>
+            <a href="{% url 'rules' %}" class="sidebar-link">Rules</a>
+        </div>
+        <div class="content">
+            <!-- Main content goes here -->
+             {% block content %}{% endblock %}
+        </div>
+    </div>
+    {% block extra_html %}{% endblock %}
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="{% static 'js/global.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</html>
