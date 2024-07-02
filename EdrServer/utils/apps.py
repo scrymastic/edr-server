@@ -12,3 +12,4 @@ class UtilsConfig(AppConfig):
             return
         # import this if you want to initialize the rules
         import utils.checks
+
