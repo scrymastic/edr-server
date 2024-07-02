@@ -15,3 +15,5 @@ def receive_events(request):
         return JsonResponse({'status': 'success', 'message': 'Events received successfully'}, status=200)
     else:
         return JsonResponse({'status': 'failed', 'message': 'Invalid request method'}, status=400)
+    
+

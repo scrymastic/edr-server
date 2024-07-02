@@ -11,9 +11,13 @@
         EDR System
     </title>
     <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tables.css' %}">
+    <link rel="stylesheet" href="{% static 'css/others.css' %}">
+
     {% block extra_css %}{% endblock %}
 </head>
 <body>
+    <button class="menu-toggle">☰</button>
     <div class="container">
         <div class="sidebar-navi">
             <a href="{% url 'dashboard' %}" class="sidebar-link">Dashboard</a>

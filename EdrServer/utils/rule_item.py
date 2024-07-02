@@ -1,6 +1,8 @@
 
 from __future__ import annotations
 from django.utils import timezone
+from django.db.models.query import QuerySet
+from django.db.models import Q
 from rules.models import Rule
 from typing import Dict, List
 from uuid import uuid4
@@ -248,6 +250,58 @@ class RuleItem(Rule):
     def generate_id() -> str:
         return str(uuid4())
     
+
+    @staticmethod
+    def search_rules(search_str: str) -> QuerySet[RuleItem]:
+        '''
+        Search for rules based on the search string.
+        Format: field1="value1" AND field2~"value2" OR ...
+        '''
+        print("Search string:", search_str)
+        if not search_str:
+            return RuleItem.objects.all()
+
+        single_query = r'([\w\d]+)\s*([~=<>])\s*"([^"]*)"'
+        pattern = single_query + r'|\b(AND|OR)\b'
+        def split_pattern_string(input_string, pattern):
+            # The pattern to match individual conditions and logical operators
+            matches = re.findall(pattern, input_string)
+            result = []
+            for match in matches:
+                if match[3]:
+                    result.append(match[3])
+                else:
+                    result.append(f'{match[0]}{match[1]}"{match[2]}"')
+            return result
+        
+        query = []
+        for token in split_pattern_string(search_str, pattern):
+            if token == 'AND':
+                query.append('&')
+            elif token == 'OR':
+                query.append('|')
+            else:
+                field, operator, value = re.match(single_query, token).groups()
+                if operator == '=':
+                    query.append('Q({}="{}")'.format(field, value))
+                elif operator == '~':
+                    query.append('Q({}__icontains="{}")'.format(field, value))
+                elif operator == '>':
+                    query.append('Q({}__gt="{}")'.format(field, value))
+                elif operator == '<':
+                    query.append('Q({}__lt="{}")'.format(field, value))
+                else:
+                    return None
+        query_str = ' '.join(query)
+        try:
+            rules = RuleItem.objects.filter(eval(query_str))
+        except Exception as e:
+            print("Error in search_rules:", e)
+            print("Query:", query_str)
+            rules = None
+
+        return rules
+
 
 if __name__ == "__main__":
     pass

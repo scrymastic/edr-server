@@ -1,6 +1,6 @@
 
 echo "Starting EDR Server..."
 
-python /usr/src/app/manage.py migrate
+python3 /usr/src/app/manage.py migrate
 
 exec "$@"

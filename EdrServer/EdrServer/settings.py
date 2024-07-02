@@ -21,9 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-DEBUG = True
-SECRET_KEY = 'django-insecure-ua(v^#pglq@i44b+n7urx86c8htmthj2^j+8j@rm4j471)r2#4'
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.63.137']
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-ua(v^#pglq@i44b+n7urx86c8htmthj2^j+8j@rm4j471)r2#4')
+ALLOWED_HOSTS_ENV = os.environ.get('DJANGO_ALLOWED_HOSTS', '*')
+ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS_ENV.split(',')]
 
 
 # Application definition
@@ -35,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts',
     'dashboard',
     'events',
     'rules',
@@ -44,6 +46,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # 'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'accounts.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'EdrServer.urls'
@@ -135,6 +139,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Custom settings
+TIME_ZONE = 'Asia/Ho_Chi_Minh'
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+SESSION_COOKIE_AGE = 1800
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 MEDIA_ROOT = BASE_DIR / 'media'
 
 STATICFILES_DIRS = [
@@ -142,5 +153,5 @@ STATICFILES_DIRS = [
 ]
 
 # Celery settings
-CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0')
 

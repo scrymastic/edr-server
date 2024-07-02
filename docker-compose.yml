@@ -20,6 +20,7 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=EdrServer.settings
       - PYTHONPATH=/usr/src/app:$PYTHONPATH
+      - CELERY_BROKER_URL=redis://redis:6379/0
 
   django:
     container_name: django
@@ -31,7 +32,7 @@ services:
     ports:
       - 8000:8000
     environment:
-      - DEBUG=1
+      - DEBUG=True
       - SECRET_KEY=django-insecure-ua(v^#pglq@i44b+n7urx86c8htmthj2^j+8j@rm4j471)r2#4
       - ALLOWED_HOSTS=*
 

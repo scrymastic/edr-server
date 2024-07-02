@@ -1,44 +1,78 @@
 
+document.addEventListener('DOMContentLoaded', () => {
+    const sidebar = document.querySelector('.sidebar-info');
+    const sidebarTitle = document.querySelector('.sidebar-info-title');
+    const sidebarDescription = document.querySelector('.sidebar-info-description');
+    const sidebarLink = document.querySelector('.sidebar-info-link');
+    const sidebarJson = document.querySelector('.sidebar-info-json');
 
-$(document).ready(function(){
-    $("tbody tr").click(function(e){
-        if (e.target.type === "checkbox") {
-            return;
-        }
-        e.stopPropagation(); // Prevent this event from bubbling up to the document
 
-        var idAttr = $(this).attr("id");
-        var splitParts = idAttr.split("/");
-        var ruleId = splitParts[1];
-        var eventUniversalId = splitParts[2];
-        var url = $(this).attr("action");
+    const showEventDetails = async (event) => {
+        if (event.target.type === 'checkbox') return;
+        event.stopPropagation();
 
-        $.ajax({
-            url: url,
-            data: {
-                'rule_id': ruleId,
-                'event_universal_id': eventUniversalId,
+        const row = event.currentTarget;
+        const [, ruleId, eventUniversalId] = row.id.split('/');
+        const url = row.getAttribute('action');
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': getCookie('csrftoken')
             },
-            success: function(data) {
-                var rule = data['rule'];
-                var event = data['event'];
-                var jsonString = JSON.stringify(event, null, 2); // The second and third arguments add indentation to make the string more readable
-                $(".sidebar-info-link").attr("href", rule['link']);
-                $(".sidebar-info-description").text(rule['description']);
-                $(".sidebar-info-json").text(jsonString);
-                    // Check if the sidebar is not visible before showing it
-                    if (!$(".sidebar-info").is(":visible")) {
-                        $(".sidebar-info").animate({width: 'toggle'}, 300);
-                    }
-            }
-        });
+            body: `rule_id=${ruleId}&event_universal_id=${eventUniversalId}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            sidebarTitle.textContent = data.rule.title;
+            sidebarDescription.textContent = data.rule.description;
+            sidebarLink.setAttribute('href', `/rules/view_rule/${data.rule.id}`);
+            sidebarJson.textContent = JSON.stringify(data.event, null, 2);
+            showSidebar();
+        })
+        .catch(error => console.error('Error:', error));
+
+    };
+
+    const showSidebar = () => {
+        if (!sidebar.offsetWidth) {
+            sidebar.style.display = 'block';
+            sidebar.style.right = '-400px';
+            sidebar.offsetWidth;
+            sidebar.style.right = '0';
+        }
+    };
+
+    const hideSidebar = () => {
+        if (sidebar.offsetWidth) {
+            sidebar.style.right = '-400px';
+            setTimeout(() => sidebar.style.display = 'none', 300);
+        }
+    };
+
+
+    document.querySelectorAll('tbody tr').forEach(row => {
+        row.addEventListener('click', showEventDetails);
     });
 
-    $(document).click(function(){
-        $(".sidebar-info").animate({width: 'hide'}, 300);
-    });
-
-    $(".sidebar-info").click(function(e){
-        e.stopPropagation(); // Prevent this event from bubbling up to the document
-    });
+    document.addEventListener('click', hideSidebar);
+    sidebar.addEventListener('click', (e) => e.stopPropagation());
 });
+
+
+// Utility function to get CSRF token
+const getCookie = (name) => {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+};

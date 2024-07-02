@@ -1,0 +1,55 @@
+
+
+
+#search-form {
+    display: flex;
+    gap: 10px;
+    max-width: 600px;
+    margin: 0 10px;
+    align-items: center;
+}
+
+
+.search-input {
+    border: 1px solid #ccc;
+    height: 32px;
+    margin: 10px 0;
+    width: 300px;
+    padding: 8px;
+    border-radius: 4px;
+    font: inherit;
+}
+
+
+.col-index {
+    width: 5%;
+}
+.col-time-filtered {
+    width: 24%;
+}
+.col-title {
+    width: 45%;
+}
+.col-level {
+    width: 6%;
+}
+.col-computer {
+    width: 10%;
+}
+.col-event-id {
+    width: 10%;
+}
+
+.level-low {
+    color: green;
+}
+
+.level-medium {
+    color: orange;
+}
+
+.level-high {
+    color: red;
+}
+
+

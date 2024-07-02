@@ -52,6 +52,7 @@ input:checked+.slider:before {
     transform: translateX(18px);
 }
 
+
 /* Rounded sliders */
 .slider.round {
     border-radius: 18px;
@@ -62,6 +63,27 @@ input:checked+.slider:before {
 }
 
 
+/* Search form */
+#search-form {
+    display: flex;
+    gap: 10px;
+    max-width: 600px;
+    margin: 0 10px;
+    align-items: center;
+}
+
+
+.search-input {
+    border: 1px solid #ccc;
+    height: 32px;
+    margin: 10px 0;
+    width: 300px;
+    padding: 8px;
+    border-radius: 4px;
+    font: inherit;
+}
+
+/* Table Styles */
 .col-index {
     width: 5%;
 }
@@ -86,6 +108,7 @@ input:checked+.slider:before {
     width: 10%;
 }
 
+
 #yaml-content {
     width: 100%;
     height: 400px;
@@ -93,6 +116,27 @@ input:checked+.slider:before {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    resize: none; /* Disable resizing */
-    font-family: monospace; /* Make the font monospace, which is better for code */
+    resize: none;
+    font-family: monospace;
+    outline: none;
+    transition: border-color 0.2s ease-in-out;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+#yaml-content:focus {
+    border-color: #008CBA;
+    box-shadow: inset 0 2px 4px rgba(52, 152, 219, 0.2);
+}
+
+.level-low {
+    color: green;
+}
+
+.level-medium {
+    color: orange;
+}
+
+.level-high {
+    color: red;
 }

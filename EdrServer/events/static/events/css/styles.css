@@ -1,29 +1,20 @@
 
 th label, th input[type="checkbox"] {
-    vertical-align: middle; /* Align them vertically in the middle */
+    vertical-align: middle;
 }
 
-/* Style the checkbox */
 input[type="checkbox"] {
-    width: 16px; /* Specify a width */
-    height: 16px; /* Specify a height */
-    background-color: #eee; /* Set a background color */
+    width: 16px;
+    height: 16px;
+    background-color: #eee;
 }
 
-/* Style the checkbox when it's checked */
 input[type="checkbox"]:checked {
-    background-color: #007BFF; /* Set a different background color when checked */
+    background-color: #007BFF;
 }
 
-/* Style the checkbox when it's hovered over */
 input[type="checkbox"]:hover {
-    background-color: #ddd; /* Set a different background color when hovered over */
-}
-
-
-.actions-container {
-    display: flex;
-    align-items: flex-end;
+    background-color: #ddd;
 }
 
 
@@ -37,4 +28,53 @@ input[type="checkbox"]:hover {
     background-color: #008CBA; /* Blue */
     cursor: pointer;
     transition: background-color 0.3s ease;
+}
+
+#search-form {
+    display: flex;
+    gap: 10px;
+    max-width: 600px;
+    margin: 0 10px;
+    align-items: center;
+}
+
+
+.search-input {
+    border: 1px solid #ccc;
+    height: 32px;
+    margin: 10px 0;
+    width: 300px;
+    padding: 8px;
+    border-radius: 4px;
+    font: inherit;
+}
+
+/* Search form */
+#upload-form {
+    display: flex;
+    gap: 10px;
+    max-width: 600px;
+    margin: 0 10px;
+    align-items: center;
+}
+
+
+
+.col-index {
+    width: 5%;
+}
+.col-time-created {
+    width: 25%
+}
+.col-computer {
+    width: 15%
+}
+.col-channel {
+    width: 35%
+}
+.col-event-id {
+    width: 10%
+}
+.col-select-all {
+    width: 15%
 }

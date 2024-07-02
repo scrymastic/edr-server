@@ -1,7 +1,8 @@
 
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.core.paginator import Paginator
+from django.template.loader import render_to_string
 from .forms import UploadFileForm
 from utils.event_item import EventItem
 from utils.log_parser import LogParser
@@ -13,20 +14,19 @@ from utils.errors import error_to_json, ERROR_FAILED, ERROR_SUCCESS
 def view_events(request):
     # EventItem.objects.all().delete()
     events = EventItem.objects.all().order_by('-time_created')
-    event_table = []
-    for event in events:
-        event_item = {
-            'time_created_system_time': EventItem.format_system_time(
+    event_list = [
+        {
+            'time_created_system_time': EventItem.convert_utc_to_local(
                 event.time_created_system_time),
             'computer': event.computer,
             'channel': event.channel,
             'event_id': event.event_id,
             'universal_id': event.universal_id,
         }
-        event_table.append(event_item)
-
+        for event in events
+    ]
     events_per_page = 200
-    paginator = Paginator(event_table, events_per_page)
+    paginator = Paginator(event_list, events_per_page)
     page_number = request.GET.get('page', 1)
     events = paginator.get_page(page_number)
     return render(request, 'events/view_events.html', {'item_page': events})
@@ -35,19 +35,19 @@ def view_events(request):
 def read_events(request):
     form = UploadFileForm()
     events = request.session.get('event_table', [])
-    event_table = []
-    for event in events:
-        event_item = {
-            'time_created_system_time': EventItem.format_system_time(
+    event_list = [
+        {
+            'time_created_system_time': EventItem.convert_utc_to_local(
                 EventItem.get_field(event, 'System', 'TimeCreated', 'SystemTime')),
             'computer': EventItem.get_field(event, 'System', 'Computer'),
             'channel': EventItem.get_field(event, 'System', 'Channel'),
             'event_id': EventItem.get_field(event, 'System', 'EventID'),
             'universal_id': EventItem.get_field(event, 'UniversalID'),
         }
-        event_table.append(event_item)
+        for event in events
+    ]
     events_per_page = 200
-    paginator = Paginator(event_table, events_per_page)
+    paginator = Paginator(event_list, events_per_page)
     page_number = request.GET.get('page', 1)
     events = paginator.get_page(page_number)
     return render(request, 'events/read_events.html', {'form': form, 'item_page': events})
@@ -70,7 +70,7 @@ def upload_file(request):
 
 
 def get_event(request):
-    universal_id = request.GET.get('universal_id')
+    universal_id = request.POST.get('universal_id')
     event_table = request.session.get('event_table', [])
     event = [event for event in event_table if EventItem.get_field(event, 'UniversalID') == universal_id]
     if event:
@@ -81,7 +81,7 @@ def get_event(request):
 
 
 def push_events(request):
-    universal_ids = request.GET.getlist('universal_ids[]')
+    universal_ids = request.POST.get('universal_ids').split(',')
     event_manager = EventManager()
     event_table = request.session.get('event_table', [])
     events = [event for event in event_table if EventItem.get_field(event, 'UniversalID') in universal_ids]
@@ -93,4 +93,33 @@ def push_events(request):
         response['message'] = 'Failed to push events'
     return JsonResponse(response)
 
+
+def search_events(request):
+    query = request.POST.get('query')
+    events = EventItem.search_events(query)
+    if events:
+        events = events.order_by('-time_created')
+        events_list = [
+            {
+                'time_created_system_time': EventItem.convert_utc_to_local(
+                    event.time_created_system_time),
+                'computer': event.computer,
+                'channel': event.channel,
+                'event_id': event.event_id,
+                'universal_id': event.universal_id,
+            }
+            for event in events
+        ]
+    else:
+        events_list = []
+    events_per_page = 200
+    paginator = Paginator(events_list, events_per_page)
+    page_number = request.POST.get('page')
+    item_page = paginator.get_page(page_number)
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        html = render_to_string('events/sample_table.html', {'item_page': item_page})
+        return HttpResponse(html)
+    else:
+        return render(request, 'events/view_events.html', {'item_page': item_page})
 

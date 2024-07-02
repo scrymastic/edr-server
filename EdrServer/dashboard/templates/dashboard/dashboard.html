@@ -1,26 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>EDR Dashboard</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+
+{% extends 'global.html' %}
+
+{% load static %}
+
+{% block extra_css %}
     <link rel="stylesheet" href="{% static 'dashboard/css/styles.css' %}">
-</head>
-</head>
-<body>
-    <div class="container">
-        <div class="sidebar-navi">
-            <a href="{% url 'dashboard' %}" class="sidebar-link">Dashboard</a>
-            <a href="{% url 'alerts' %}" class="sidebar-link">Alerts</a>
-            <a href="{% url 'events' %}" class="sidebar-link">Events</a>
-            <a href="{% url 'rules' %}" class="sidebar-link">Rules</a>
+    <link rel="stylesheet" href="{% static 'dashboard/css/chart.css' %}">
+{% endblock %}
+
+
+{% block content %}
+    <div class="dashboard-container">
+        <h1>Dashboard</h1>
+        
+        <div class="alert-distribution">
+            <h2>Alerts Distribution</h2>
+            <div class="chart-container">
+                <canvas id="alertChart" data-chart='{{ alert_chart_data|safe }}'></canvas>
+            </div>
         </div>
-        <div class="content">
-            <p>Welcome to the dashboard!</p>
-            <p>This is your EDR system dashboard. Navigate using the menu above.</p>
+        
+        <div class="events-summary">
+            <h2>Events Summary</h2>
+            <div class="events-chart-container">
+                <canvas id="eventsChart" data-chart='{{ events_chart_data|safe }}'></canvas>
+            </div>
         </div>
     </div>
-</body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-</html>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'dashboard/js/scripts.js' %}"></script>
+{% endblock %}

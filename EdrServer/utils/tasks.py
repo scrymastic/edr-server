@@ -36,7 +36,7 @@ def process_event_redis(event: Dict) -> ERROR_CODE:
         return ERROR_SUCCESS
     except Exception as e:
         return ERROR_FAILED
-    
+
 
 @shared_task
 def save_event_db(event: Dict) -> ERROR_CODE:

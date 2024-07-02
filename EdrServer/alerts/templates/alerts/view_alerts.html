@@ -9,16 +9,22 @@
 
 {% block content %}
     <h1>Alerts</h1>
+    <div class="actions-container">
+        <form id="search-form" action="{% url 'search_alerts' %}">
+            <input class='search-input' type="text" id="search" name="query" placeholder="Search alerts">
+            <button type="submit" id="search-button">Search</button>
+        </form>
+    </div>
     <div class="table-container">
         <table>
             <thead>
                 <tr>
-                    <th>Index</th>
-                    <th>Time Filtered</Fieldset>
-                    <th>Title</th>
-                    <th>Level</th>
-                    <th>Computer</th>
-                    <th>Event ID</th>
+                    <th class="col-index">Index</th>
+                    <th class="col-time-filtered">Time Filtered</th>
+                    <th class="col-title">Title</th>
+                    <th class="col-level">Level</th>
+                    <th class="col-computer">Computer</th>
+                    <th class="col-event-id">Event ID</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,7 +33,9 @@
                     <td>{{ forloop.counter0|add:item_page.start_index}}</td>
                     <td>{{ item.time_filtered }}</td>
                     <td>{{ item.title }}</td>
-                    <td>{{ item.level }}</td>
+                    <td class="level-{% if item.level.lower == 'low' %}low{% elif item.level.lower == 'medium' %}medium{% elif item.level.lower == 'high' %}high{% endif %}">
+                        {{ item.level }}
+                    </td>
                     <td>{{ item.computer }}</td>
                     <td>{{ item.event_id }}</td>
                 </tr>
@@ -58,8 +66,9 @@
     <div class="sidebar-info" style="display: none;">
         <h2>Alert Details</h2>
         <h3>Rule: </h3>
-        <a class="sidebar-info-link">View Rule</a>
+        <h4 class="sidebar-info-title"></h4>
         <pre class="sidebar-info-description"></pre>
+        <a class="sidebar-info-link">View Rule</a>
         <h3>Event: </h3>
         <pre class="sidebar-info-json"></pre>
     </div>
