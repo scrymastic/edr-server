@@ -1,3 +1,4 @@
+
 from django.apps import AppConfig
 import os
 
@@ -9,5 +10,5 @@ class UtilsConfig(AppConfig):
     def ready(self):
         if os.environ.get('RUN_MAIN', None) != 'true':
             return
-        ## import this if you want to initialize the rules
-        # import utils.checks
+        # import this if you want to initialize the rules
+        import utils.checks
