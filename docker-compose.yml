@@ -1,11 +1,12 @@
 
 services:
   postgres:
+    container_name: postgres
     image: postgres:13
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=kali
+      - POSTGRES_DB=edrdb
       - POSTGRES_USER=kali
       - POSTGRES_PASSWORD=kali
 
@@ -18,6 +19,7 @@ services:
       - 6378:6378
     volumes:
       - redis_data:/data
+
 
   celery:
     container_name: celery
@@ -49,10 +51,12 @@ services:
       - DEBUG=True
       - SECRET_KEY=django-insecure-ua(v^#pglq@i44b+n7urx86c8htmthj2^j+8j@rm4j471)r2#4
       - ALLOWED_HOSTS=*
+      - POSTGRES_HOST=postgres
       - CELERY_BROKER_URL=redis://redis:6378/0
     depends_on:
       - postgres
       - redis
+
 
 volumes:
   redis_data:

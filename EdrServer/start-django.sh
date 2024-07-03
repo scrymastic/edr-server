@@ -5,13 +5,13 @@ echo 'Setting up EDR Server...'
 cd /usr/src/app
 python3 manage.py makemigrations
 python3 manage.py migrate
-chmod +777 db.sqlite3
+
 export DJANGO_SUPERUSER_USERNAME='kali'
 export DJANGO_SUPERUSER_EMAIL='kali@example.com'
 export DJANGO_SUPERUSER_PASSWORD='kali'
 
 # Attempt to create the superuser and suppress the 'already exists' error
-if python3 manage.py createsuperuser --noinput 2>/dev/null; then
+if python3 manage.py createsuperuser --noinput; then
     echo "Superuser created."
 else
     echo "Superuser already exists or could not be created."
