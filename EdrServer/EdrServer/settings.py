@@ -30,6 +30,8 @@ ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS_ENV.split(',')]
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -75,6 +77,7 @@ TEMPLATES = [
     },
 ]
 
+ASGI_APPLICATION = 'EdrServer.asgi.application'
 WSGI_APPLICATION = 'EdrServer.wsgi.application'
 
 

@@ -7,6 +7,6 @@ export DJANGO_SUPERUSER_PASSWORD=kali
 python3 /usr/src/app/manage.py createsuperuser --noinput
 python3 /usr/src/app/manage.py migrate
 
-exec "$@"
-
 echo "EDR Server is set up."
+
+exec "$@"

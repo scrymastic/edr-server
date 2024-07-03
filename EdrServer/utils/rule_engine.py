@@ -113,8 +113,6 @@ class RuleEngine(metaclass=Singleton):
 
     @staticmethod
     def init_rules() -> int:
-        import time
-        start_time = time.time()
         from django.conf import settings
         import yaml
         dir_path = settings.BASE_DIR / 'utils' / 'rules'
@@ -137,8 +135,7 @@ class RuleEngine(metaclass=Singleton):
         for rule in rules:
             if rule.is_active:
                 deploy_rule_redis(rule.id, rule.to_rule_filter())
-        end_time = time.time()
-        print(f"Time taken: {end_time - start_time} seconds")
+
         return len(rules)
 
 

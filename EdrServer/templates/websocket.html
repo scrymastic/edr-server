@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+</head>
+<body>
+    <h1>WebSocket Test</h1>
+    <div id="messages"></div>
+    <script>
+        var ws = new WebSocket("ws://" + window.location.host + "/ws/echo/");
+        ws.onopen = function() {
+            console.log('Connection opened');
+            ws.send('Hello WebSocket!');
+        };
+        ws.onmessage = function(event) {
+            console.log('Received:', event.data);
+            document.getElementById('messages').innerHTML += '<p>' + event.data + '</p>';
+        };
+        ws.onclose = function() {
+            console.log('Connection closed');
+        };
+    </script>
+</body>
+</html>

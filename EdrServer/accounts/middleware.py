@@ -9,8 +9,11 @@ class LoginRequiredMiddleware:
 
     def __call__(self, request):
         exempt_urls = ['/api/receive_events/']
+        websockets = '/ws/'
+        print('request.path_info:', request.path_info)
         if not request.user.is_authenticated \
             and request.path_info not in [reverse('login')] \
-            and not any([request.path_info.startswith(url) for url in exempt_urls]):
+            and not any([request.path_info.startswith(url) for url in exempt_urls]) \
+            and not request.path_info.startswith(websockets):
             return redirect('login')
         return self.get_response(request)
