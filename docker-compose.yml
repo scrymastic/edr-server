@@ -1,5 +1,15 @@
 
 services:
+  postgres:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=kali
+      - POSTGRES_USER=kali
+      - POSTGRES_PASSWORD=kali
+
+
   redis:
     container_name: redis
     image: redis:alpine
@@ -13,23 +23,26 @@ services:
     container_name: celery
     build:
       context: ./EdrServer
-    command: celery -A EdrServer.celery worker --loglevel=info
-    volumes:
-      - ./EdrServer:/usr/src/app
+    command: >
+      /bin/bash -c 
+        "echo 'Starting Celery worker...' &&
+        cd /usr/src/app &&
+        celery -A EdrServer worker --loglevel=info"
     depends_on:
       - redis
     environment:
       - DJANGO_SETTINGS_MODULE=EdrServer.settings
-      - PYTHONPATH=/usr/src/app:$PYTHONPATH
       - CELERY_BROKER_URL=redis://redis:6378/0
+
 
   django:
     container_name: django
     build:
       context: ./EdrServer
-    command: python /usr/src/app/manage.py runserver 0.0.0.0:8001
-    volumes:
-      - ./EdrServer:/usr/src/app
+    command: >
+      /bin/bash -c 
+        "chmod +x /usr/src/app/start-django.sh &&
+        /usr/src/app/start-django.sh"
     ports:
       - 8001:8001
     environment:
@@ -37,6 +50,10 @@ services:
       - SECRET_KEY=django-insecure-ua(v^#pglq@i44b+n7urx86c8htmthj2^j+8j@rm4j471)r2#4
       - ALLOWED_HOSTS=*
       - CELERY_BROKER_URL=redis://redis:6378/0
+    depends_on:
+      - postgres
+      - redis
 
 volumes:
   redis_data:
+  postgres_data:

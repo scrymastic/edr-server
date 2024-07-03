@@ -10,6 +10,4 @@ COPY . /usr/src/app
 
 RUN pip install --upgrade pip
 RUN pip install -r /usr/src/app/requirements.txt
-RUN chmod +x /usr/src/app/start.sh
 
-CMD ["sh", "-c", "/usr/src/app/start.sh"]

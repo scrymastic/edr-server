@@ -13,7 +13,6 @@ def view_alerts(request):
     AlertManager.save_new_alerts()
     alerts = AlertItem.objects.all().order_by('-time_filtered')\
         .select_related('event', 'rule')
-    print(alerts[0].time_filtered)
     alert_list = []
     for alert in alerts:
         event: EventItem = alert.event

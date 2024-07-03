@@ -6,3 +6,4 @@ evtx~=0.8.4
 pytz~=2024.1
 PyYAML~=6.0.1
 redis~=5.0.6
+psycopg2-binary~=2.9.3

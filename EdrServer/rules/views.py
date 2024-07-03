@@ -30,7 +30,6 @@ def view_rules(request):
     
 def view_rule(request, rule_id):
     # Load a specific rule from the database
-    rule = RuleItem.objects.get(id=rule_id)
     rule_yaml = RuleItem.objects.get(id=rule_id).to_yaml()
     return render(request, 'rules/view_rule.html', {'rule_id': rule_id, 'yaml_content': rule_yaml})
 
