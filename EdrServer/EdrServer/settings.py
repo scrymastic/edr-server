@@ -90,7 +90,7 @@ DATABASES = {
         'NAME': 'edrdb',
         'USER': 'kali',
         'PASSWORD': 'kali',
-        'HOST': 'postgres',
+        'HOST': 'postgres', # 'postgres',
         'PORT': '5432',
     }
 }

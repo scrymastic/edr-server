@@ -33,7 +33,7 @@
                     <td>{{ forloop.counter0|add:item_page.start_index}}</td>
                     <td>{{ item.time_filtered }}</td>
                     <td>{{ item.title }}</td>
-                    <td class="level-{% if item.level.lower == 'low' %}low{% elif item.level.lower == 'medium' %}medium{% elif item.level.lower == 'high' %}high{% endif %}">
+                    <td class="level-{% if item.level.lower == 'low' %}low{% elif item.level.lower == 'medium' %}medium{% elif item.level.lower == 'high' %}high{% elif item.level.lower == 'critical' %}critical{% endif %}">
                         {{ item.level }}
                     </td>
                     <td>{{ item.computer }}</td>

@@ -29,7 +29,7 @@ class AlertItem(Alert):
     def get_level_distribution() -> dict:
         alert_levels = AlertItem.objects.values_list('rule__level', flat=True)
         level_counts = Counter(alert_levels)
-        custom_order = {'low': 0, 'medium': 1, 'high': 2}
+        custom_order = {'low': 0, 'medium': 1, 'high': 2, 'critical': 3}
         sorted_level_counts = dict(sorted(level_counts.items(), key=lambda item: (custom_order.get(item[0], float('inf')), item[0])))
 
         return sorted_level_counts

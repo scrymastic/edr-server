@@ -16,12 +16,14 @@ def view_dashboard(request):
         'labels': alert_labels,
         'datasets': [{
             'data': alert_data,
-            'backgroundColor': ['#4CAF50', '#FFC107', '#F44336']
+            'backgroundColor': ['#4CAF50', '#FFC107', '#F44336', '#B71C1C']  # Using a darker red for Critical
         }]
     }
 
     events_labels = [RuleItem.get_expected_category(event_id) for event_id in event_event_id_distribution.keys()]
     events_data = list(event_event_id_distribution.values())
+    print(events_labels)
+    print(events_data)
     events_data = {
         'labels': events_labels,
         'datasets': [{

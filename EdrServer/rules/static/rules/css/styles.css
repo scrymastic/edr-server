@@ -140,3 +140,7 @@ input:checked+.slider:before {
 .level-high {
     color: red;
 }
+
+.level-critical {
+    color: #800000;
+}
