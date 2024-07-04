@@ -243,7 +243,7 @@ class RuleItem(Rule):
 
     @staticmethod
     def get_expected_category(event_id: int) -> str:
-        return categories_mapping.get(event_id, None)
+        return categories_mapping.get(event_id, 'unknown')
     
 
     @staticmethod

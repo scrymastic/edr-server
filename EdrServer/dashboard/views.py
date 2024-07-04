@@ -22,8 +22,6 @@ def view_dashboard(request):
 
     events_labels = [RuleItem.get_expected_category(event_id) for event_id in event_event_id_distribution.keys()]
     events_data = list(event_event_id_distribution.values())
-    print(events_labels)
-    print(events_data)
     events_data = {
         'labels': events_labels,
         'datasets': [{
