@@ -1,6 +1,6 @@
 
 from utils.singleton import Singleton
-from utils.tasks import process_event_redis, save_event_db
+from utils.tasks import process_event_redis
 from utils.event_item import EventItem
 from typing import Dict, List
 
@@ -17,7 +17,6 @@ class EventManager(metaclass=Singleton):
     @staticmethod
     def push_event(event: Dict) -> ERROR_CODE:
         process_event_redis.delay(event)
-        save_event_db.delay(event)
         return ERROR_SUCCESS
     
     @staticmethod

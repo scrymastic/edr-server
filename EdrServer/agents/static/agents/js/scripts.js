@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
-                alert(data.message);
+                console.log(data.message);
             })
             .then(data => {
                 console.log('Connection request sent successfully:', data);

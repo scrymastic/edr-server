@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const selectAllCheckbox = document.getElementById('select-all');
     const checkboxes = document.querySelectorAll('input[name="event_checkbox"]');

@@ -9,6 +9,7 @@ from django.utils import timezone
 from EdrServer.celery import app
 from utils.filter_engine import FilterEngine
 from utils.event_item import EventItem
+from utils.rule_item import RuleItem
 from utils.alert_item import AlertItem
 from utils.errors import *
 import redis
@@ -26,28 +27,27 @@ def process_event_redis(event: Dict) -> ERROR_CODE:
         for rule_id, rule in redis_conn.hgetall("rules").items():
             rule_id = rule_id.decode()
             rule = json.loads(rule)
-            if FilterEngine.match_rule(rule, event):
-                alert = {
-                    "event_universal_id": EventItem.get_field(event, 'UniversalID'),
-                    "rule_id": rule_id,
-                    "time_filtered": timezone.now().isoformat()
-                }
-                redis_conn.rpush("alerts", json.dumps(alert))
+            if not FilterEngine.match_rule(rule, event):
+                continue
+            try:
+                event = EventItem.from_dict(event)
+                rule = RuleItem.objects.get(id=rule_id)
+                event.save()
+                AlertItem(
+                    event=event,
+                    rule=rule,
+                    time_filtered=timezone.now()
+                ).save()
+                return ERROR_SUCCESS
+            except Exception as e:
+                print('Error saving event to database:', e)
+                return ERROR_FAILED
         return ERROR_SUCCESS
     except Exception as e:
         print('Error processing event:', e)
         return ERROR_FAILED
-
-
-@shared_task
-def save_event_db(event: Dict) -> ERROR_CODE:
-    try:
-        EventItem.from_dict(event).save()
-        return ERROR_SUCCESS
-    except Exception as e:
-        print('Error saving event to database:', e)
-        return ERROR_FAILED
     
+
 
 @shared_task
 def deploy_rule_redis(rule_id: str, rule: Dict) -> ERROR_CODE:
@@ -68,14 +68,14 @@ def undeploy_rule_redis(rule_id: str) -> ERROR_CODE:
         return ERROR_FAILED
 
 
-def get_alerts_redis() -> List[Dict]:
-    alerts = []
-    while True:
-        alert = redis_conn.rpop("alerts")
-        if not alert:
-            break
-        alerts.append(json.loads(alert))
-    return alerts
+# def get_alerts_redis() -> List[Dict]:
+#     alerts = []
+#     while True:
+#         alert = redis_conn.rpop("alerts")
+#         if not alert:
+#             break
+#         alerts.append(json.loads(alert))
+#     return alerts
 
 
 # def add_agent_redis(agent_ip: str, agent_info: Dict) -> ERROR_CODE:

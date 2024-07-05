@@ -2,15 +2,12 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from utils.alert_manager import AlertManager
 from utils.alert_item import AlertItem
 from utils.rule_item import RuleItem
 from utils.event_item import EventItem
 
 
 def view_alerts(request):
-    # AlertItem.objects.all().delete()
-    AlertManager.save_new_alerts()
     alerts = AlertItem.objects.all().order_by('-time_filtered')\
         .select_related('event', 'rule')
     alert_list = []

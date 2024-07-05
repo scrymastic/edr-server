@@ -13,21 +13,18 @@ class AlertItem(Alert):
 
     @staticmethod
     def from_dict(alert_dict) -> AlertItem:
-        try:
-            alert = AlertItem(
-                event = EventItem.objects.get(universal_id=alert_dict['event_universal_id']),
-                rule = RuleItem.objects.get(id=alert_dict['rule_id']),
-                time_filtered=alert_dict['time_filtered']
-            )
-        except Exception as e:
-            print(f"Error in AlertItem.from_dict: {e}")
-            return None
+        alert = AlertItem(
+            event = EventItem.objects.get(universal_id=alert_dict['event_universal_id']),
+            rule = RuleItem.objects.get(id=alert_dict['rule_id']),
+            time_filtered=alert_dict['time_filtered']
+        )
         return alert
     
 
     @staticmethod
     def search_alerts(query: str) -> QuerySet[AlertItem]:
-        return [AlertItem.from_dict(alert) for alert in AlertItem.objects.filter(query)]
+        # return [AlertItem.from_dict(alert) for alert in AlertItem.objects.filter(query)]
+        pass
 
     @staticmethod
     def get_level_distribution() -> dict:
