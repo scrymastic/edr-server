@@ -27,23 +27,19 @@ def process_event_redis(event: Dict) -> ERROR_CODE:
         for rule_id, rule in redis_conn.hgetall("rules").items():
             rule_id = rule_id.decode()
             rule = json.loads(rule)
-            if not FilterEngine.match_rule(rule, event):
-                event = EventItem.from_dict(event)
-                event.save()
-                return ERROR_SUCCESS
             try:
                 event = EventItem.from_dict(event)
-                rule = RuleItem.objects.get(id=rule_id)
                 event.save()
-                AlertItem(
-                    event=event,
-                    rule=rule,
-                    time_filtered=timezone.now()
-                ).save()
-                return ERROR_SUCCESS
+                if FilterEngine.match_rule(rule, event):
+                    rule = RuleItem.objects.get(id=rule_id)
+                    AlertItem(
+                        event=event,
+                        rule=rule,
+                        time_filtered=timezone.now()
+                    ).save()
             except Exception as e:
                 print('Error saving event to database:', e)
-                return ERROR_FAILED
+                continue
         return ERROR_SUCCESS
     except Exception as e:
         print('Error processing event:', e)
