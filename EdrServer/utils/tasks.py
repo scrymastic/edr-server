@@ -22,24 +22,20 @@ redis_conn = redis.Redis(connection_pool=pool)
 
 
 @shared_task
-def process_event_redis(event: Dict) -> ERROR_CODE:
+def process_event_redis(event_dict: Dict) -> ERROR_CODE:
     try:
-        for rule_id, rule in redis_conn.hgetall("rules").items():
+        event = EventItem.from_dict(event_dict)
+        event.save()
+        for rule_id, rule_redis in redis_conn.hgetall("rules").items():
             rule_id = rule_id.decode()
-            rule = json.loads(rule)
-            try:
-                event = EventItem.from_dict(event)
-                event.save()
-                if FilterEngine.match_rule(rule, event):
-                    rule = RuleItem.objects.get(id=rule_id)
-                    AlertItem(
-                        event=event,
-                        rule=rule,
-                        time_filtered=timezone.now()
-                    ).save()
-            except Exception as e:
-                print('Error saving event to database:', e)
-                continue
+            rule_dict = json.loads(rule_redis)
+            if FilterEngine.match_rule(rule_dict, event_dict):
+                rule = RuleItem.objects.get(id=rule_id)
+                AlertItem(
+                    event=event,
+                    rule=rule,
+                    time_filtered=timezone.now()
+                ).save()
         return ERROR_SUCCESS
     except Exception as e:
         print('Error processing event:', e)
