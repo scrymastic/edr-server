@@ -11,15 +11,15 @@ class EventManager(metaclass=Singleton):
 
     def push_events(self, events: List[Dict]) -> ERROR_CODE:
         for event in events:
-            self.push_event(event)
+            EventManager.push_event(event)
         return ERROR_SUCCESS
     
-
-    def push_event(self, event: Dict) -> ERROR_CODE:
+    @staticmethod
+    def push_event(event: Dict) -> ERROR_CODE:
         process_event_redis.delay(event)
         save_event_db.delay(event)
         return ERROR_SUCCESS
     
-
-    def get_event(self, universal_id: str) -> Dict:
+    @staticmethod
+    def get_event(universal_id: str) -> Dict:
         return EventItem.objects.get(universal_id=universal_id).to_dict()

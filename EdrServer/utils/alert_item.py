@@ -13,11 +13,15 @@ class AlertItem(Alert):
 
     @staticmethod
     def from_dict(alert_dict) -> AlertItem:
-        alert = AlertItem(
-            event = EventItem.objects.get(universal_id=alert_dict['event_universal_id']),
-            rule = RuleItem.objects.get(id=alert_dict['rule_id']),
-            time_filtered=alert_dict['time_filtered']
-        )
+        try:
+            alert = AlertItem(
+                event = EventItem.objects.get(universal_id=alert_dict['event_universal_id']),
+                rule = RuleItem.objects.get(id=alert_dict['rule_id']),
+                time_filtered=alert_dict['time_filtered']
+            )
+        except Exception as e:
+            print(f"Error in AlertItem.from_dict: {e}")
+            return None
         return alert
     
 

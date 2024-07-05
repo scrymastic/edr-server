@@ -35,6 +35,7 @@ def process_event_redis(event: Dict) -> ERROR_CODE:
                 redis_conn.rpush("alerts", json.dumps(alert))
         return ERROR_SUCCESS
     except Exception as e:
+        print('Error processing event:', e)
         return ERROR_FAILED
 
 
@@ -44,6 +45,7 @@ def save_event_db(event: Dict) -> ERROR_CODE:
         EventItem.from_dict(event).save()
         return ERROR_SUCCESS
     except Exception as e:
+        print('Error saving event to database:', e)
         return ERROR_FAILED
     
 
@@ -53,6 +55,7 @@ def deploy_rule_redis(rule_id: str, rule: Dict) -> ERROR_CODE:
         redis_conn.hset("rules", rule_id, json.dumps(rule))
         return ERROR_SUCCESS
     except Exception as e:
+        print('Error deploying rule to Redis:', e)
         return ERROR_FAILED
     
 
@@ -61,6 +64,7 @@ def undeploy_rule_redis(rule_id: str) -> ERROR_CODE:
         redis_conn.hdel("rules", rule_id)
         return ERROR_SUCCESS
     except Exception as e:
+        print('Error undeploying rule from Redis:', e)
         return ERROR_FAILED
 
 
@@ -74,6 +78,22 @@ def get_alerts_redis() -> List[Dict]:
     return alerts
 
 
+# def add_agent_redis(agent_ip: str, agent_info: Dict) -> ERROR_CODE:
+#     try:
+#         redis_conn.hset("agents", agent_ip, json.dumps(agent_info))
+#         return ERROR_SUCCESS
+#     except Exception as e:
+#         return ERROR_FAILED
+    
+
+# def remove_agent_redis(agent_ip: str) -> ERROR_CODE:
+#     try:
+#         redis_conn.hdel("agents", agent_ip)
+#         return ERROR_SUCCESS
+#     except Exception as e:
+#         return ERROR_FAILED
+
+
 @shared_task
 def db_cleanup() -> ERROR_CODE:
     try:
@@ -83,6 +103,7 @@ def db_cleanup() -> ERROR_CODE:
             events[10000:].delete()
         return ERROR_SUCCESS
     except Exception as e:
+        print('Error cleaning up database:', e)
         return ERROR_FAILED
 
 

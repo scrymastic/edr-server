@@ -25,5 +25,6 @@ urlpatterns = [
     path('', include('alerts.urls')),
     path('', include('events.urls')),
     path('', include('rules.urls')),
+    path('', include('agents.urls')),
     path('', include('api.urls')),
 ]

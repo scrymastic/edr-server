@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rules',
     'utils',
     'alerts',
+    'agents',
     'api',
 ]
 
@@ -90,7 +91,7 @@ DATABASES = {
         'NAME': 'edrdb',
         'USER': 'kali',
         'PASSWORD': 'kali',
-        'HOST': 'postgres', # 'postgres',
+        'HOST': 'postgres',
         'PORT': '5432',
     }
 }
@@ -162,3 +163,9 @@ STATICFILES_DIRS = [
 # Celery settings
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0')
 
+# Channels settings
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
