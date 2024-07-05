@@ -28,7 +28,9 @@ def process_event_redis(event: Dict) -> ERROR_CODE:
             rule_id = rule_id.decode()
             rule = json.loads(rule)
             if not FilterEngine.match_rule(rule, event):
-                continue
+                event = EventItem.from_dict(event)
+                event.save()
+                return ERROR_SUCCESS
             try:
                 event = EventItem.from_dict(event)
                 rule = RuleItem.objects.get(id=rule_id)
