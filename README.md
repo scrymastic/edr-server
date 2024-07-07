@@ -1,6 +1,6 @@
 # EDR Server
 
-EDR Server is a simple Endpoint Detection and Response (EDR) system designed to monitor, detect, and respond to threats on network endpoints. It aims to provide real-time security against malware, ransomware, and other cyber threats, ensuring the integrity and security of networked devices.
+EDR Server is a comprehensive (simple for now) Endpoint Detection and Response (EDR) system designed to monitor, detect, and respond to threats on network endpoints. It aims to provide real-time security against malware, ransomware, and other cyber threats, ensuring the integrity and security of networked devices.
 
 ## Features
 
