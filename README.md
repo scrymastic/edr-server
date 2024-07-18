@@ -5,7 +5,7 @@
 ![Status](https://img.shields.io/badge/Status-Development-red)
 
 
-EDR Server is a comprehensive (simple for now) Endpoint Detection and Response (EDR) system designed to monitor, detect, and respond to threats on network endpoints. It aims to provide real-time security against malware, ransomware, and other cyber threats, ensuring the integrity and security of networked devices.
+EDR Server is a comprehensive (simple for now) Endpoint Detection and Response (EDR) system designed to monitor, detect, and respond to threats on network endpoints. It aims to provide real-time security against malware and other cyber threats by continuously monitoring endpoint activities and identifying suspicious behaviors.
 
 ## Features
 
