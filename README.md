@@ -73,6 +73,17 @@ There are 1814 rules available in the system, imported from [Sigma rules for Win
 
 The `Agents` tab provides a detailed view of all endpoints monitored by the system, including their current status and recent activities.
 
+The system offers the capability to establish a connection with the agent via a reverse shell. However, this functionality has raised security concerns.
+
+To start a connection from the server, initiate a listening service by executing the command below. Ensure you replace `4444` with your preferred port number, which should match the one specified in the edr-agent's configuration file:
+
+```bash
+nc -lvp 4444
+```
+Subsequently, establish a connection to the agent by selecting the `Connect` button.
+
+![alt text](image.png)
+
 ## Testing
 
 Perform attacks on the endpoint to test the EDR system.
@@ -117,7 +128,6 @@ powershell.exe -EncodedCommand UwB0AGEAcgB0AC0AUAByAG8AYwBlAHMAcwAgAG4AbwB0AGUAc
 ### Command and Control (C2)
 
 ### Actions on Objectives
-
 
 ## Contributing
 
