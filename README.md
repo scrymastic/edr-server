@@ -82,7 +82,7 @@ nc -lvp 4444
 ```
 Subsequently, establish a connection to the agent by selecting the `Connect` button.
 
-![alt text](image.png)
+![alt text](imgs/image.png)
 
 ## Testing
 
