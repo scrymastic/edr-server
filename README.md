@@ -11,8 +11,8 @@ EDR Server is a comprehensive (simple for now) Endpoint Detection and Response (
 
 - **Real-time Monitoring:** Continuous observation of endpoint activities to identify suspicious behaviors.
 - **Threat Detection:** Advanced algorithms to detect known and unknown threats.
-- **Automated Response:** Immediate action on detected threats to mitigate damage. (not implemented)
-- **Incident Reporting:** Detailed reports on security incidents for analysis and compliance. (not implemented)
+- **Automated Response:** Immediate action on detected threats to mitigate damage. (not implemented yet)
+- **Incident Reporting:** Detailed reports on security incidents for analysis and compliance. (not implemented yet)
 - **Customizable Policies:** Tailor security policies to meet specific organizational needs.
 
 ## Installation
